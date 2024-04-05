@@ -20,17 +20,18 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("/admin")
 @RequiredArgsConstructor
+@Slf4j
 public class AdminController {
 
     final UserRepository userRepository;
@@ -40,21 +41,28 @@ public class AdminController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request, HttpServletResponse res) throws CustomBadRequestException {
-
         User user = getUser(request.getEmailOrPhone());
-        ;
         if (user == null)
             throw new CustomBadRequestException("Bad Credentials");
         if (!PasswordEncoder.isPasswordMatch(request.getPassword(), user.getPassword()))
             throw new CustomBadRequestException("Bad Credentials");
-
         setCookie(res, user);
+
+        log.info("\033[1;92m ADMIN | Login Successful.\033[0m");
         return ResponseEntity.status(200).body(Map.of("message", "Success"));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> me(HttpServletRequest request) throws CustomUnauthorizedException {
+        User user = verifyLogin(request);
+        log.info("\033[1;92m ADMIN | Get Profile Successful.\033[0m");
+        return ResponseEntity.status(200).body(user);
     }
 
     @GetMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         CookieHelper.deleteAdminCookie(request, response);
+        log.info("\033[1;92m ADMIN | Logout Successful.\033[0m");
         return ResponseEntity.status(200).body(Map.of("message", "Success"));
     }
 
@@ -149,19 +157,22 @@ public class AdminController {
     }
 
 
-    private void verifyLogin(HttpServletRequest req) throws CustomUnauthorizedException {
+    private User verifyLogin(HttpServletRequest req) throws CustomUnauthorizedException {
         String cookie = CookieHelper.getAdminCookieValue(req);
         if (cookie == null)
             throw new CustomUnauthorizedException("Unauthorized");
         User user = userRepository.findByCookie(UUID.fromString(cookie));
         if (user == null)
             throw new CustomUnauthorizedException("Unauthorized");
+        return user;
     }
 
     private void setCookie(HttpServletResponse res, User user) {
         UUID cookieId = UUID.randomUUID();
         user.setCookie(cookieId);
         Cookie cookie = new Cookie("ADMIN_COOKIE", cookieId.toString());
+        cookie.setPath("/");
+        cookie.setSecure(true);
         res.addCookie(cookie);
         userRepository.save(user);
     }

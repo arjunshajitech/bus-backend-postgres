@@ -51,6 +51,8 @@ public class CookieHelper {
                 if (cookie.getName().equals("ADMIN_COOKIE")) {
                     cookie.setMaxAge(0);
                     cookie.setValue("");
+                    cookie.setPath("/");
+                    cookie.setSecure(true);
                     res.addCookie(cookie);
                     break;
                 }
