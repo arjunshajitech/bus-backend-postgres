@@ -67,6 +67,8 @@ public class CookieHelper {
                 if (cookie.getName().equals("BUS_OWNER_COOKIE")) {
                     cookie.setMaxAge(0);
                     cookie.setValue("");
+                    cookie.setPath("/");
+                    cookie.setSecure(true);
                     res.addCookie(cookie);
                     break;
                 }

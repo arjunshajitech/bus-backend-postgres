@@ -22,6 +22,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/busowner")
 @RequiredArgsConstructor
+@Slf4j
 public class BusOwnerController {
 
     final UserRepository userRepository;
@@ -56,13 +58,22 @@ public class BusOwnerController {
             throw new CustomBadRequestException("Bad Credentials");
 
         setCookie(res,user);
+        log.info("\033[1;94m BUSOWNER |            Login Successful.\033[0m");
         return ResponseEntity.status(200).body(Map.of("message","Success"));
     }
 
     @GetMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request,HttpServletResponse response) {
         CookieHelper.deleteBusOwnerCookie(request,response);
+        log.info("\033[1;94m BUSOWNER |            Logout Successful.\033[0m");
         return ResponseEntity.status(200).body(Map.of("message", "Success"));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> me(HttpServletRequest request) throws CustomUnauthorizedException {
+        User user = verifyLoginAndReturnUser(request);
+        log.info("\033[1;94m BUSOWNER |            Get Profile Successful.\033[0m");
+        return ResponseEntity.status(200).body(user);
     }
 
 
@@ -189,6 +200,8 @@ public class BusOwnerController {
         UUID cookieId = UUID.randomUUID();
         user.setCookie(cookieId);
         Cookie cookie = new Cookie("BUS_OWNER_COOKIE", cookieId.toString());
+        cookie.setPath("/");
+        cookie.setSecure(true);
         res.addCookie(cookie);
         userRepository.save(user);
     }
