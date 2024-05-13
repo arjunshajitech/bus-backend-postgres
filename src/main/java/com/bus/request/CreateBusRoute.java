@@ -9,7 +9,7 @@ import java.util.UUID;
 @Data
 public class CreateBusRoute {
 
-    private UUID busId;
+    private UUID busId = UUID.randomUUID();
     private String startLocation;
     private String endLocation;
     private LocalTime startTime;

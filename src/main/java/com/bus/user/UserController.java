@@ -79,6 +79,12 @@ public class UserController {
         return ResponseEntity.status(200).body(Map.of("message", "Success"));
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<?> me(HttpServletRequest request) throws CustomUnauthorizedException {
+        User user = verifyLoginAndReturnUser(request);
+        return ResponseEntity.status(200).body(user);
+    }
+
     @GetMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         CookieHelper.deleteUserCookie(request, response);
@@ -96,7 +102,10 @@ public class UserController {
             busRoutes.forEach(route -> {
                 Bus bus = busRepository.findOneById(route.getBusId());
                 if (bus != null) {
-                    busRoutesList.add(new BusRoutes(route,bus.getBusName(),bus.getOwnerName()));
+                    LocalTime time = LocalTime.now();
+                    boolean started = time.isAfter(route.getStartTime()) && time.isBefore(route.getEndTime());
+                    boolean ended = time.isAfter(route.getEndTime());
+                    busRoutesList.add(new BusRoutes(route,bus.getBusName(),bus.getOwnerName(),started,ended));
                 }
             });
         }

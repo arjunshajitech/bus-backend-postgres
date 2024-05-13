@@ -14,4 +14,6 @@ public interface BusRepository extends JpaRepository<Bus, UUID> {
     Bus findByIdAndOwnerId(UUID id, UUID id1);
 
     Bus findOneById(UUID busId);
+
+    Bus findByOwnerId(UUID ownerId);
 }

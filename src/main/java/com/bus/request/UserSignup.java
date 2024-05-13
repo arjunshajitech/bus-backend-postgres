@@ -10,6 +10,5 @@ public class UserSignup {
     private String email;
     private String phone;
     private String password;
-    private String address;
     private UserRole role = UserRole.USER;
 }

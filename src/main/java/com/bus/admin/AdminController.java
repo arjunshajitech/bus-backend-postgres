@@ -47,22 +47,18 @@ public class AdminController {
         if (!PasswordEncoder.isPasswordMatch(request.getPassword(), user.getPassword()))
             throw new CustomBadRequestException("Bad Credentials");
         setCookie(res, user);
-
-        log.info("\033[1;92m ADMIN |            Login Successful.\033[0m");
         return ResponseEntity.status(200).body(Map.of("message", "Success"));
     }
 
     @GetMapping("/me")
     public ResponseEntity<?> me(HttpServletRequest request) throws CustomUnauthorizedException {
         User user = verifyLogin(request);
-        log.info("\033[1;92m ADMIN |            Get Profile Successful.\033[0m");
         return ResponseEntity.status(200).body(user);
     }
 
     @GetMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
         CookieHelper.deleteAdminCookie(request, response);
-        log.info("\033[1;92m ADMIN |            Logout Successful.\033[0m");
         return ResponseEntity.status(200).body(Map.of("message", "Success"));
     }
 
@@ -80,8 +76,6 @@ public class AdminController {
                 request.getFirstName(), request.getLastName(), request.getPhone(), request.getEmail(),
                 PasswordEncoder.encodePassword(request.getPassword()), request.getRole()
         ));
-
-        log.info("\033[1;92m ADMIN |            Create Bus Owner Successful.\033[0m");
         return ResponseEntity.status(200).body(Map.of("message", "Success"));
     }
 
@@ -94,8 +88,6 @@ public class AdminController {
     @GetMapping("/busowners")
     public ResponseEntity<?> getAllBusOwners(HttpServletRequest request) throws CustomUnauthorizedException {
         verifyLogin(request);
-
-        log.info("\033[1;92m ADMIN |            Get All Bus Owners Successful.\033[0m");
         return ResponseEntity.status(200).body(userRepository.findAllByRole(UserRole.BUS_OWNER));
     }
 
@@ -114,8 +106,6 @@ public class AdminController {
             busRouteRepository.deleteAll(routeList);
             subRouteRepository.deleteAll(subRouteList);
         }
-
-        log.info("\033[1;92m ADMIN |            Delete Bus Onwer Successful.\033[0m");
         return ResponseEntity.status(200).body(Map.of("message", "Success"));
     }
 

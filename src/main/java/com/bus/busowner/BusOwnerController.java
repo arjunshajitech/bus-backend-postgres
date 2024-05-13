@@ -13,6 +13,7 @@ import com.bus.request.CreateBus;
 import com.bus.request.CreateBusRoute;
 import com.bus.request.CreateSubRoute;
 import com.bus.request.LoginRequest;
+import com.bus.response.GetAllRoutes;
 import com.bus.tables.Bus;
 import com.bus.tables.Route;
 import com.bus.tables.SubRoute;
@@ -26,10 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 
 @RestController
@@ -58,21 +56,18 @@ public class BusOwnerController {
             throw new CustomBadRequestException("Bad Credentials");
 
         setCookie(res,user);
-        log.info("\033[1;94m BUSOWNER |            Login Successful.\033[0m");
         return ResponseEntity.status(200).body(Map.of("message","Success"));
     }
 
     @GetMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request,HttpServletResponse response) {
         CookieHelper.deleteBusOwnerCookie(request,response);
-        log.info("\033[1;94m BUSOWNER |            Logout Successful.\033[0m");
         return ResponseEntity.status(200).body(Map.of("message", "Success"));
     }
 
     @GetMapping("/me")
     public ResponseEntity<?> me(HttpServletRequest request) throws CustomUnauthorizedException {
         User user = verifyLoginAndReturnUser(request);
-        log.info("\033[1;94m BUSOWNER |            Get Profile Successful.\033[0m");
         return ResponseEntity.status(200).body(user);
     }
 
@@ -139,7 +134,20 @@ public class BusOwnerController {
     @GetMapping("/routes")
     public ResponseEntity<?> getAllRoutes(HttpServletRequest request) throws CustomUnauthorizedException {
         User user = verifyLoginAndReturnUser(request);
-        return ResponseEntity.status(200).body(busRouteRepository.findAllByOwnerId(user.getId()));
+        List<Route> routeList = busRouteRepository.findAllByOwnerId(user.getId());
+        List<GetAllRoutes> getAllRoutes = new ArrayList<>();
+        if (!routeList.isEmpty()) {
+            routeList.forEach(route -> {
+                Bus bus = busRepository.findByIdAndOwnerId(route.getBusId(),route.getOwnerId());
+                if(bus != null)
+                    getAllRoutes.add(new GetAllRoutes(
+                            route.getId(),route.getOwnerId(),
+                            route.getBusId(),route.getStartLocation(),route.getEndLocation(),
+                            route.getStartTime(),route.getEndTime(),bus.getBusName(),route.getDay()
+                    ));
+            });
+        }
+        return ResponseEntity.status(200).body(getAllRoutes);
     }
 
     @DeleteMapping("/routes/{id}")
