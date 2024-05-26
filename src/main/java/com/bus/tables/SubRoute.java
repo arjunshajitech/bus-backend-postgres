@@ -18,7 +18,7 @@ import java.util.UUID;
 public class SubRoute {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private UUID busId;
     private UUID ownerId;

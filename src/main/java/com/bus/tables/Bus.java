@@ -17,7 +17,7 @@ import java.util.UUID;
 public class Bus {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private UUID ownerId;
     private String ownerName;

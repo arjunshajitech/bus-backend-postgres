@@ -19,7 +19,7 @@ import java.util.UUID;
 @Table(name = "bus_route_details")
 public class Route {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
     private UUID ownerId;
     private UUID busId;

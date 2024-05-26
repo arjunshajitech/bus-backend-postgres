@@ -119,13 +119,17 @@ public class UserController {
 
         User user = verifyLoginAndReturnUser(request);
         List<BusSubRoutes> busSubRoutes = new ArrayList<>();
-
         List<SubRoute> busRoutes = subRouteRepository.findAllByRouteId(id);
-        if (!busRoutes.isEmpty()) {
+        Route route = busRouteRepository.findById(id).orElse(null);
+        if (route != null) {
+            SubRoute sr = new SubRoute(null,null,null,route.getStartLocation(),route.getStartTime());
+            busSubRoutes.add(new BusSubRoutes(sr,true));
             busRoutes.forEach(subRoute -> {
                 boolean completed = subRoute.getBusTime().isBefore(LocalTime.now());
                 busSubRoutes.add(new BusSubRoutes(subRoute,completed));
             });
+            SubRoute srr = new SubRoute(null,null,null,route.getEndLocation(),route.getEndTime());
+            busSubRoutes.add(new BusSubRoutes(srr,true));
         }
 
         return ResponseEntity.status(200).body(busSubRoutes);

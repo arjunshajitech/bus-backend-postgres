@@ -18,7 +18,7 @@ import java.util.UUID;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
     private String firstName;
@@ -37,6 +37,16 @@ public class User {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phoneNumber;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
+    public User(UUID id, String firstName, String lastName, String phone, String email, String password, UserRole role) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
         this.email = email;
         this.password = password;
         this.role = role;
