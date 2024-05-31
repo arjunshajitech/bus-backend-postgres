@@ -76,6 +76,21 @@ public class AppConfig {
             busRouteList.add(new Route(busOwner.getId(), bus.getId(), "Alappuzha, Kerala", "Mannamcherry, Alappuzha", LocalTime.of(10, 30, 0), LocalTime.of(11, 30, 0), WeekDay.FRIDAY));
             busRouteList.add(new Route(busOwner.getId(), bus.getId(), "Alappuzha, Kerala", "Mannamcherry, Alappuzha", LocalTime.of(10, 30, 0), LocalTime.of(11, 30, 0), WeekDay.SATURDAY));
             busRouteList.add(new Route(busOwner.getId(), bus.getId(), "Alappuzha, Kerala", "Mannamcherry, Alappuzha", LocalTime.of(10, 30, 0), LocalTime.of(11, 30, 0), WeekDay.SUNDAY));
+
+            busRouteList.add(new Route(busOwner.getId(), bus.getId(), "Cherthala, Alappuzha", "Muhamma, Alappuzha", LocalTime.of(12, 30, 0), LocalTime.of(13, 30, 0), WeekDay.MONDAY));
+            busRouteList.add(new Route(busOwner.getId(), bus.getId(), "Cherthala, Alappuzha", "Muhamma, Alappuzha", LocalTime.of(12, 30, 0), LocalTime.of(13, 30, 0), WeekDay.TUESDAY));
+            busRouteList.add(new Route(busOwner.getId(), bus.getId(), "Cherthala, Alappuzha", "Muhamma, Alappuzha", LocalTime.of(12, 30, 0), LocalTime.of(13, 30, 0), WeekDay.WEDNESDAY));
+            busRouteList.add(new Route(busOwner.getId(), bus.getId(), "Cherthala, Alappuzha", "Muhamma, Alappuzha", LocalTime.of(12, 30, 0), LocalTime.of(13, 30, 0), WeekDay.THURSDAY));
+            busRouteList.add(new Route(busOwner.getId(), bus.getId(), "Cherthala, Alappuzha", "Muhamma, Alappuzha", LocalTime.of(12, 30, 0), LocalTime.of(13, 30, 0), WeekDay.FRIDAY));
+            busRouteList.add(new Route(busOwner.getId(), bus.getId(), "Cherthala, Alappuzha", "Muhamma, Alappuzha", LocalTime.of(12, 30, 0), LocalTime.of(13, 30, 0), WeekDay.SATURDAY));
+            busRouteList.add(new Route(busOwner.getId(), bus.getId(), "Cherthala, Alappuzha", "Muhamma, Alappuzha", LocalTime.of(12, 30, 0), LocalTime.of(13, 30, 0), WeekDay.SUNDAY));
+            busRouteList.add(new Route(busOwner.getId(), bus.getId(), "Alappuzha, Kerala", "Cherthala, Alappuzha", LocalTime.of(14, 0, 0), LocalTime.of(18, 30, 0), WeekDay.MONDAY));
+            busRouteList.add(new Route(busOwner.getId(), bus.getId(), "Alappuzha, Kerala", "Cherthala, Alappuzha", LocalTime.of(14, 0, 0), LocalTime.of(18, 30, 0), WeekDay.TUESDAY));
+            busRouteList.add(new Route(busOwner.getId(), bus.getId(), "Alappuzha, Kerala", "Cherthala, Alappuzha", LocalTime.of(14, 0, 0), LocalTime.of(18, 30, 0), WeekDay.WEDNESDAY));
+            busRouteList.add(new Route(busOwner.getId(), bus.getId(), "Alappuzha, Kerala", "Cherthala, Alappuzha", LocalTime.of(14, 0, 0), LocalTime.of(18, 30, 0), WeekDay.THURSDAY));
+            busRouteList.add(new Route(busOwner.getId(), bus.getId(), "Alappuzha, Kerala", "Cherthala, Alappuzha", LocalTime.of(14, 0, 0), LocalTime.of(18, 30, 0), WeekDay.FRIDAY));
+            busRouteList.add(new Route(busOwner.getId(), bus.getId(), "Alappuzha, Kerala", "Cherthala, Alappuzha", LocalTime.of(14, 0, 0), LocalTime.of(18, 30, 0), WeekDay.SATURDAY));
+            busRouteList.add(new Route(busOwner.getId(), bus.getId(), "Alappuzha, Kerala", "Cherthala, Alappuzha", LocalTime.of(14, 0, 0), LocalTime.of(18, 30, 0), WeekDay.SUNDAY));
             
             busRouteRepository.saveAll(busRouteList);
         }

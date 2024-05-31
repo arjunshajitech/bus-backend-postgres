@@ -122,14 +122,16 @@ public class UserController {
         List<SubRoute> busRoutes = subRouteRepository.findAllByRouteId(id);
         Route route = busRouteRepository.findById(id).orElse(null);
         if (route != null) {
+            boolean isStartTimeOver = route.getStartTime().isBefore(LocalTime.now());
             SubRoute sr = new SubRoute(null,null,null,route.getStartLocation(),route.getStartTime());
-            busSubRoutes.add(new BusSubRoutes(sr,true));
+            busSubRoutes.add(new BusSubRoutes(sr,isStartTimeOver));
             busRoutes.forEach(subRoute -> {
                 boolean completed = subRoute.getBusTime().isBefore(LocalTime.now());
                 busSubRoutes.add(new BusSubRoutes(subRoute,completed));
             });
             SubRoute srr = new SubRoute(null,null,null,route.getEndLocation(),route.getEndTime());
-            busSubRoutes.add(new BusSubRoutes(srr,true));
+            boolean isEndTimeOver = route.getEndTime().isBefore(LocalTime.now());
+            busSubRoutes.add(new BusSubRoutes(srr,isEndTimeOver));
         }
 
         return ResponseEntity.status(200).body(busSubRoutes);
