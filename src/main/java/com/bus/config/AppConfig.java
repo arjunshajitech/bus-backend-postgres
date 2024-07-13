@@ -40,7 +40,7 @@ public class AppConfig {
         List<User> userList = new ArrayList<>();
         userList.add(new User("Admin", "Admin", null, "admin@admin.com", PasswordEncoder.encodePassword("111111"), UserRole.ADMIN));
         userList.add(new User("Super", "Admin", null, "superadmin@admin.com", PasswordEncoder.encodePassword("111111"), UserRole.ADMIN));
-        userList.add(new User("Default", "User", "0000000000", "user@user.com", PasswordEncoder.encodePassword("111111"), UserRole.USER));
+        userList.add(new User("Default", "User", "7744998855", "user@user.com", PasswordEncoder.encodePassword("111111"), UserRole.USER));
 
         userList.forEach(user -> {
             boolean isUserExists = userRepository.existsByEmailAndRole(user.getEmail(), user.getRole());
@@ -56,7 +56,7 @@ public class AppConfig {
         boolean notExists = userRepository.existsByEmailAndRole("bus@bus.com", UserRole.BUS_OWNER);
         if (!notExists) {
             User busOwner = userRepository.save(new User(
-                    "Default", "BusOwner", "0000000001", "bus@bus.com", PasswordEncoder.encodePassword("111111"), UserRole.BUS_OWNER)
+                    "Default", "BusOwner", "8877996655", "bus@bus.com", PasswordEncoder.encodePassword("111111"), UserRole.BUS_OWNER)
             );
 
             Bus bus = busRepository.save(new Bus(busOwner.getId(), "Default BusOwner", "The Rock", "KL 784512"));

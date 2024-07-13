@@ -11,4 +11,5 @@ import lombok.NoArgsConstructor;
 public class BusSubRoutes {
     private SubRoute subRoute;
     private boolean completed;
+    private String times;
 }

@@ -14,4 +14,7 @@ public class BusRoutes {
     private String ownerName;
     private boolean started = false;
     private boolean ended = false;
+    private String startTime;
+    private String endTime;
+    private String phone;
 }

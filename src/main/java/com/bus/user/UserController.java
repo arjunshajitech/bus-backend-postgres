@@ -29,10 +29,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/user")
@@ -100,12 +97,26 @@ public class UserController {
         List<Route> busRoutes = busRouteRepository.findAllByDay(day);
         if (!busRoutes.isEmpty()) {
             busRoutes.forEach(route -> {
+                User user1 = userRepository.findByIdAndRole(route.getOwnerId(), UserRole.BUS_OWNER);
                 Bus bus = busRepository.findOneById(route.getBusId());
                 if (bus != null) {
+                    String t1;
+                    String t2;
                     LocalTime time = LocalTime.now();
                     boolean started = time.isAfter(route.getStartTime()) && time.isBefore(route.getEndTime());
                     boolean ended = time.isAfter(route.getEndTime());
-                    busRoutesList.add(new BusRoutes(route,bus.getBusName(),bus.getOwnerName(),started,ended));
+                    LocalTime t = LocalTime.of(12,0,0);
+                    if(route.getStartTime().isBefore(t)) {
+                        t1 = "AM";
+                    } else {
+                        t1 = "PM";
+                    }
+                    if(route.getEndTime().isBefore(t)) {
+                        t2 = "AM";
+                    } else {
+                        t2 = "PM";
+                    }
+                    busRoutesList.add(new BusRoutes(route,bus.getBusName(),bus.getOwnerName(),started,ended,t1,t2,user1.getPhone()));
                 }
             });
         }
@@ -124,17 +135,27 @@ public class UserController {
         if (route != null) {
             boolean isStartTimeOver = route.getStartTime().isBefore(LocalTime.now());
             SubRoute sr = new SubRoute(null,null,null,route.getStartLocation(),route.getStartTime());
-            busSubRoutes.add(new BusSubRoutes(sr,isStartTimeOver));
+            busSubRoutes.add(new BusSubRoutes(sr,isStartTimeOver,checkTimes(route.getStartTime())));
             busRoutes.forEach(subRoute -> {
                 boolean completed = subRoute.getBusTime().isBefore(LocalTime.now());
-                busSubRoutes.add(new BusSubRoutes(subRoute,completed));
+                busSubRoutes.add(new BusSubRoutes(subRoute,completed,checkTimes(subRoute.getBusTime())));
             });
             SubRoute srr = new SubRoute(null,null,null,route.getEndLocation(),route.getEndTime());
             boolean isEndTimeOver = route.getEndTime().isBefore(LocalTime.now());
-            busSubRoutes.add(new BusSubRoutes(srr,isEndTimeOver));
+            busSubRoutes.add(new BusSubRoutes(srr,isEndTimeOver,checkTimes(route.getEndTime())));
         }
 
+        busSubRoutes.sort(Comparator.comparing(b -> b.getSubRoute().getBusTime()));
         return ResponseEntity.status(200).body(busSubRoutes);
+    }
+
+    public String checkTimes(LocalTime localTime) {
+        LocalTime t = LocalTime.of(12,0,0);
+        if(localTime.isBefore(t)) {
+            return  "AM";
+        } else {
+            return  "PM";
+        }
     }
 
 
